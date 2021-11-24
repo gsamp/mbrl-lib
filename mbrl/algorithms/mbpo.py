@@ -145,6 +145,13 @@ def train(
 
     # -------------- Create initial overrides. dataset --------------
     dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg, obs_shape, act_shape)
+
+    backwards_dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg,
+            obs_shape, act_shape, backwards = True)
+    # TODO: modify create_one_dim_tr_model in /mbrl/util/common.py to take
+    # backwards param and use according class
+
+
     use_double_dtype = cfg.algorithm.get("normalize_double_precision", False)
     dtype = np.double if use_double_dtype else np.float32
     replay_buffer = mbrl.util.common.create_replay_buffer(

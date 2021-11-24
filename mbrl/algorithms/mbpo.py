@@ -146,11 +146,10 @@ def train(
     # -------------- Create initial overrides. dataset --------------
     dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg, obs_shape, act_shape)
 
+    # GEORGIA BEGIN
     backwards_dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg,
             obs_shape, act_shape, backwards = True)
-    # TODO: modify create_one_dim_tr_model in /mbrl/util/common.py to take
-    # backwards param and use according class
-
+    # GEORGIA END
 
     use_double_dtype = cfg.algorithm.get("normalize_double_precision", False)
     dtype = np.double if use_double_dtype else np.float32
@@ -185,12 +184,29 @@ def train(
     model_env = mbrl.models.ModelEnv(
         env, dynamics_model, termination_fn, None, generator=torch_generator
     )
+
+    # GEORGIA BEGIN
+    backwards_model_env = mbrl.models.ModelEnv(
+        env, backwards_dynamics_model, termination_fn, None,
+        generator=torch_generator
+    )
+    # GEORGIA END
+    
     model_trainer = mbrl.models.ModelTrainer(
         dynamics_model,
         optim_lr=cfg.overrides.model_lr,
         weight_decay=cfg.overrides.model_wd,
         logger=None if silent else logger,
     )
+
+    # GEORGIA BEGIN
+    backwards_model_trainer = mbrl.models.ModelTrainer(
+        backwards_dynamics_model, 
+        optim_lr = cfg.overrides.model_lr, 
+        weight_decay = cfg.overrides.model_wd, 
+        logger=None if silent else logger, 
+    )
+    # GEORGIA END
     best_eval_reward = -np.inf
     epoch = 0
     sac_buffer = None
@@ -227,6 +243,16 @@ def train(
                     replay_buffer,
                     work_dir=work_dir,
                 )
+
+                # GEORGIA BEGIN
+                mbrl.util.common.train_model_and_save_model_and_data(
+                    backwards_dynamics_model, 
+                    backwards_model_trainer, 
+                    cfg.overrides, 
+                    replay_buffer, 
+                    work_dir=work_dir,
+                )
+                # GEORGIA END
 
                 # --------- Rollout new model and store imagined trajectories --------
                 # Batch all rollouts for the next freq_train_model steps together

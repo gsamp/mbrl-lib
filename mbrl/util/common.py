@@ -28,6 +28,7 @@ def create_one_dim_tr_model(
     obs_shape: Tuple[int, ...],
     act_shape: Tuple[int, ...],
     model_dir: Optional[Union[str, pathlib.Path]] = None,
+    backwards: bool = False, 
 ):
     """Creates a 1-D transition reward model from a given configuration.
 
@@ -92,18 +93,32 @@ def create_one_dim_tr_model(
         obs_process_fn = hydra.utils.get_method(cfg.overrides.obs_process_fn)
     else:
         obs_process_fn = None
-    dynamics_model = mbrl.models.OneDTransitionRewardModel(
-        model,
-        target_is_delta=cfg.algorithm.target_is_delta,
-        normalize=cfg.algorithm.normalize,
-        normalize_double_precision=cfg.algorithm.get(
-            "normalize_double_precision", False
-        ),
-        learned_rewards=cfg.algorithm.learned_rewards,
-        obs_process_fn=obs_process_fn,
-        no_delta_list=cfg.overrides.get("no_delta_list", None),
-        num_elites=cfg.overrides.get("num_elites", None),
-    )
+    if backwards:
+        dynamics_model = mbrl.models.BackwardsOneDTransitionRewardModel(
+            model, 
+            target_is_delta=cfg.algorithm.target_is_delta,
+            normalize=cfg.algorithm.normalize,
+            normalize_double_precision=cfg.algorithm.get(
+                "normalize_double_precision", False
+            ),
+            learned_rewards=cfg.algorithm.learned_rewards,
+            obs_process_fn=obs_process_fn,
+            no_delta_list=cfg.overrides.get("no_delta_list", None),
+            num_elites=cfg.overrides.get("num_elites", None),
+        ) 
+    else:
+        dynamics_model = mbrl.models.OneDTransitionRewardModel(
+            model,
+            target_is_delta=cfg.algorithm.target_is_delta,
+            normalize=cfg.algorithm.normalize,
+            normalize_double_precision=cfg.algorithm.get(
+                "normalize_double_precision", False
+            ),
+            learned_rewards=cfg.algorithm.learned_rewards,
+            obs_process_fn=obs_process_fn,
+            no_delta_list=cfg.overrides.get("no_delta_list", None),
+            num_elites=cfg.overrides.get("num_elites", None),
+        )
     if model_dir:
         dynamics_model.load(model_dir)
 

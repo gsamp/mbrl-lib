@@ -124,7 +124,13 @@ def train(
     act_shape = env.action_space.shape
 
     mbrl.planning.complete_agent_cfg(env, cfg.algorithm.agent)
+    # GEORGIA BEGIN
+    mbrl.planning.complete_agent_cfg(env, cfg.algorithm.backwards_agent)
+    # GEORGIA END
     agent = hydra.utils.instantiate(cfg.algorithm.agent)
+    # GEORGIA BEGIN
+    backwards_agent = hydra.utils.instantiate(cfg.algorithm.backwards_agent)
+    # GEORGIA END
 
     work_dir = work_dir or os.getcwd()
     # enable_back_compatible to use pytorch_sac agent
@@ -145,6 +151,11 @@ def train(
 
     # -------------- Create initial overrides. dataset --------------
     dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg, obs_shape, act_shape)
+
+    # GEORGIA BEGIN
+    backwards_dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg,
+            obs_shape, act_shape, backwards = True)
+    # GEORGIA END
 
     use_double_dtype = cfg.algorithm.get("normalize_double_precision", False)
     dtype = np.double if use_double_dtype else np.float32
@@ -180,6 +191,13 @@ def train(
         env, dynamics_model, termination_fn, None, generator=torch_generator
     )
 
+    # GEORGIA BEGIN
+    backwards_model_env = mbrl.models.ModelEnv(
+        env, backwards_dynamics_model, termination_fn, None,
+        generator=torch_generator
+    )
+    # GEORGIA END
+    
     model_trainer = mbrl.models.ModelTrainer(
         dynamics_model,
         optim_lr=cfg.overrides.model_lr,
@@ -187,6 +205,14 @@ def train(
         logger=None if silent else logger,
     )
 
+    # GEORGIA BEGIN
+    backwards_model_trainer = mbrl.models.ModelTrainer(
+        backwards_dynamics_model, 
+        optim_lr = cfg.overrides.model_lr, 
+        weight_decay = cfg.overrides.model_wd, 
+        logger=None if silent else logger, 
+    )
+    # GEORGIA END
     best_eval_reward = -np.inf
     epoch = 0
     sac_buffer = None
@@ -224,6 +250,16 @@ def train(
                     work_dir=work_dir,
                 )
 
+                # GEORGIA BEGIN
+                mbrl.util.common.train_model_and_save_model_and_data(
+                    backwards_dynamics_model, 
+                    backwards_model_trainer, 
+                    cfg.overrides, 
+                    replay_buffer, 
+                    work_dir=work_dir,
+                )
+                # GEORGIA END
+
                 # --------- Rollout new model and store imagined trajectories --------
                 # Batch all rollouts for the next freq_train_model steps together
                 rollout_model_and_populate_sac_buffer(
@@ -251,6 +287,9 @@ def train(
                 ) < rollout_batch_size:
                     break  # only update every once in a while
                 agent.update(sac_buffer, logger, updates_made)
+                # GEORGIA BEGIN
+                backwards_agent.update(sac_buffer, logger, updates_made)
+                # GEORGIA END
                 updates_made += 1
                 if not silent and updates_made % cfg.log_frequency_agent == 0:
                     logger.dump(updates_made, save=True)

@@ -169,3 +169,26 @@ class SACAgent(Agent):
 
         torch.save(self.critic.state_dict(), critic_path)
         torch.save(self.actor.state_dict(), actor_path)
+
+# GEORGIA BEGIN
+class BackwardsSACAgent(SACAgent):
+    
+    def update(self, replay_buffer, logger, step):
+        next_obs, action, reward, obs, not_done, not_done_no_max = replay_buffer.sample(
+            self.batch_size
+        )
+
+        logger.log("train/batch_reward", reward.mean(), step)
+
+        self.update_critic(obs, action, reward, next_obs, not_done_no_max, logger, step)
+
+        if step % self.actor_update_frequency == 0:
+            self.update_actor_and_alpha(obs, logger, step)
+
+        if step % self.critic_target_update_frequency == 0:
+            utils.soft_update_params(self.critic, self.critic_target, self.critic_tau)
+
+
+# GEORGIA END
+        
+

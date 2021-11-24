@@ -124,7 +124,11 @@ def train(
     act_shape = env.action_space.shape
 
     mbrl.planning.complete_agent_cfg(env, cfg.algorithm.agent)
+    # GEORGIA BEGIN
+    # GEORGIA END
     agent = hydra.utils.instantiate(cfg.algorithm.agent)
+    # GEORGIA BEGIN
+    # GEORGIA END
 
     work_dir = work_dir or os.getcwd()
     # enable_back_compatible to use pytorch_sac agent

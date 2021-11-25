@@ -1,4 +1,15 @@
-import .one_dim_tr_model
+import pathlib
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+
+import numpy as np
+import torch
+
+import mbrl.models.util as model_util
+import mbrl.types
+import mbrl.util.math
+
+from .model import Ensemble, Model
+from .one_dim_tr_model import OneDTransitionRewardModel
 
 class BackwardsOneDTransitionRewardModel(OneDTransitionRewardModel):
     def _process_batch(self, batch: mbrl.types.TransitionBatch, _as_float: bool = False) -> Tuple[torch.Tensor, torch.Tensor]:

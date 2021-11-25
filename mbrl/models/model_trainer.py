@@ -46,19 +46,28 @@ class ModelTrainer:
         optim_lr: float = 1e-4,
         weight_decay: float = 1e-5,
         optim_eps: float = 1e-8,
+        # GEORGIA BEGIN
+        group_name: Optional[str] = None,
+        # GEORGIA END
         logger: Optional[Logger] = None,
     ):
         self.model = model
         self._train_iteration = 0
 
         self.logger = logger
+        # GEORGIA BEGIN
         if self.logger:
+            if group_name:
+                self.group_name = group_name
+            else:
+                self.group_name = _LOG_GROUP_NAME
             self.logger.register_group(
-                self._LOG_GROUP_NAME,
+                self.group_name,
                 MODEL_LOG_FORMAT,
                 color="blue",
                 dump_frequency=1,
             )
+        # GEORGIA END
 
         self.optimizer = optim.Adam(
             self.model.parameters(),
@@ -178,7 +187,7 @@ class ModelTrainer:
 
             if self.logger and not silent:
                 self.logger.log_data(
-                    self._LOG_GROUP_NAME,
+                    self.group_name,
                     {
                         "iteration": self._train_iteration,
                         "epoch": epoch,

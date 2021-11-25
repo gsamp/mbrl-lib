@@ -1,0 +1,174 @@
+2021-11-25 04:16:47,450 INFO    MainThread:3715 [wandb_setup.py:_flush():71] setting env: {}
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_setup.py:_flush():71] setting login settings: {}
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_init.py:_log_setup():371] Logging user logs to /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/logs/debug.log
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_init.py:_log_setup():372] Logging internal logs to /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/logs/debug-internal.log
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_init.py:init():404] calling init triggers
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_init.py:init():411] wandb.init called with sweep_config: {}
+config: {'seed': 0, 'device': 'cuda:0', 'log_frequency_agent': 1000, 'save_video': False, 'debug_mode': True, 'experiment': 'default', 'root_dir': './exp', 'algorithm': {'name': 'mbpo_backwards', 'normalize': True, 'normalize_double_precision': True, 'target_is_delta': True, 'learned_rewards': True, 'freq_train_model': '${overrides.freq_train_model}', 'sac_samples_action': True, 'initial_exploration_steps': 5000, 'random_initial_explore': False, 'num_eval_episodes': 1, 'agent': {'_target_': 'mbrl.third_party.pytorch_sac.agent.sac.SACAgent', 'obs_dim': '???', 'action_dim': '???', 'action_range': '???', 'device': '${device}', 'critic_cfg': '${algorithm.double_q_critic}', 'actor_cfg': '${algorithm.diag_gaussian_actor}', 'discount': 0.99, 'init_temperature': 0.1, 'alpha_lr': '${overrides.sac_alpha_lr}', 'alpha_betas': [0.9, 0.999], 'actor_lr': '${overrides.sac_actor_lr}', 'actor_betas': [0.9, 0.999], 'actor_update_frequency': '${overrides.sac_actor_update_frequency}', 'critic_lr': '${overrides.sac_critic_lr}', 'critic_betas': [0.9, 0.999], 'critic_tau': 0.005, 'critic_target_update_frequency': '${overrides.sac_critic_target_update_frequency}', 'batch_size': 256, 'learnable_temperature': True, 'target_entropy': '${overrides.sac_target_entropy}'}, 'backwards_agent': {'_target_': 'mbrl.third_party.pytorch_sac.agent.sac.BackwardsSACAgent', 'obs_dim': '???', 'action_dim': '???', 'action_range': '???', 'device': '${device}', 'critic_cfg': '${algorithm.double_q_critic}', 'actor_cfg': '${algorithm.diag_gaussian_actor}', 'discount': 0.99, 'init_temperature': 0.1, 'alpha_lr': '${overrides.sac_alpha_lr}', 'alpha_betas': [0.9, 0.999], 'actor_lr': '${overrides.sac_actor_lr}', 'actor_betas': [0.9, 0.999], 'actor_update_frequency': '${overrides.sac_actor_update_frequency}', 'critic_lr': '${overrides.sac_critic_lr}', 'critic_betas': [0.9, 0.999], 'critic_tau': 0.005, 'critic_target_update_frequency': '${overrides.sac_critic_target_update_frequency}', 'batch_size': 256, 'learnable_temperature': True, 'target_entropy': '${overrides.sac_target_entropy}'}, 'double_q_critic': {'_target_': 'mbrl.third_party.pytorch_sac.agent.critic.DoubleQCritic', 'obs_dim': '${algorithm.agent.obs_dim}', 'action_dim': '${algorithm.agent.action_dim}', 'hidden_dim': 1024, 'hidden_depth': '${overrides.sac_hidden_depth}'}, 'diag_gaussian_actor': {'_target_': 'mbrl.third_party.pytorch_sac.agent.actor.DiagGaussianActor', 'obs_dim': '${algorithm.agent.obs_dim}', 'action_dim': '${algorithm.agent.action_dim}', 'hidden_depth': '${overrides.sac_hidden_depth}', 'hidden_dim': 1024, 'log_std_bounds': [-5, 2]}}, 'dynamics_model': {'_target_': 'mbrl.models.GaussianMLP', 'device': '${device}', 'num_layers': 4, 'in_size': '???', 'out_size': '???', 'ensemble_size': 7, 'hid_size': 200, 'deterministic': False, 'propagation_method': 'random_model', 'learn_logvar_bounds': False, 'activation_fn_cfg': {'_target_': 'torch.nn.SiLU'}}, 'overrides': {'env': 'cartpole_continuous', 'trial_length': 200, 'num_steps': 5000, 'epoch_length': 200, 'num_elites': 5, 'patience': 5, 'model_lr': 0.001, 'model_wd': 5e-05, 'model_batch_size': 256, 'validation_ratio': 0.2, 'freq_train_model': 200, 'effective_model_rollouts_per_step': 400, 'rollout_schedule': [1, 15, 1, 1], 'num_sac_updates_per_step': 20, 'sac_updates_every_steps': 1, 'num_epochs_to_retain_sac_buffer': 1, 'sac_critic_lr': 0.0003, 'sac_actor_lr': 0.0003, 'sac_alpha_lr': 0.0001, 'sac_actor_update_frequency': 1, 'sac_critic_target_update_frequency': 4, 'sac_target_entropy': -0.05, 'sac_hidden_depth': 2}, 'action_optimizer': {'_target_': 'mbrl.planning.CEMOptimizer', 'num_iterations': '${overrides.cem_num_iters}', 'elite_ratio': '${overrides.cem_elite_ratio}', 'population_size': '${overrides.cem_population_size}', 'alpha': '${overrides.cem_alpha}', 'lower_bound': '???', 'upper_bound': '???', 'return_mean_elites': True, 'device': '${device}', 'clipped_normal': '${overrides.cem_clipped_normal}'}}
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [wandb_init.py:init():449] starting backend
+2021-11-25 04:16:47,451 INFO    MainThread:3715 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: fork
+2021-11-25 04:16:47,456 INFO    MainThread:3715 [backend.py:ensure_launched():199] starting backend process...
+2021-11-25 04:16:47,462 INFO    MainThread:3715 [backend.py:ensure_launched():205] started backend process with pid: 3729
+2021-11-25 04:16:47,467 INFO    MainThread:3715 [wandb_init.py:init():458] backend started and connected
+2021-11-25 04:16:47,470 INFO    MainThread:3715 [wandb_init.py:init():519] updated telemetry
+2021-11-25 04:16:47,471 INFO    MainThread:3729 [internal.py:wandb_internal():90] W&B internal server running at pid: 3729, started at: 2021-11-25 04:16:47.466504
+2021-11-25 04:16:47,485 INFO    WriterThread:3729 [datastore.py:open_for_write():77] open: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/run-2o9qphg7.wandb
+2021-11-25 04:16:47,494 INFO    MainThread:3715 [wandb_init.py:init():549] communicating current version
+2021-11-25 04:16:47,561 INFO    MainThread:3715 [wandb_init.py:init():554] got version response 
+2021-11-25 04:16:47,561 INFO    MainThread:3715 [wandb_init.py:init():564] communicating run to backend with 30 second timeout
+2021-11-25 04:16:47,640 INFO    MainThread:3715 [wandb_init.py:init():592] starting run threads in backend
+2021-11-25 04:16:47,715 INFO    SenderThread:3729 [dir_watcher.py:__init__():169] watching files in: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files
+2021-11-25 04:16:47,715 INFO    SenderThread:3729 [sender.py:_start_run_threads():828] run started: 2o9qphg7 with start time 1637813807
+2021-11-25 04:16:47,716 INFO    SenderThread:3729 [sender.py:_save_file():960] saving file wandb-summary.json with policy end
+2021-11-25 04:16:48,718 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_created():217] file/dir created: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-summary.json
+2021-11-25 04:16:48,718 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_created():217] file/dir created: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/conda-environment.yaml
+2021-11-25 04:16:48,719 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_created():217] file/dir created: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/requirements.txt
+2021-11-25 04:16:52,654 INFO    MainThread:3715 [wandb_run.py:_console_start():1816] atexit reg
+2021-11-25 04:16:52,655 INFO    MainThread:3715 [wandb_run.py:_redirect():1690] redirect: SettingsConsole.REDIRECT
+2021-11-25 04:16:52,655 INFO    MainThread:3715 [wandb_run.py:_redirect():1695] Redirecting console.
+2021-11-25 04:16:52,666 INFO    MainThread:3715 [wandb_run.py:_redirect():1751] Redirects installed.
+2021-11-25 04:16:52,666 INFO    MainThread:3715 [wandb_init.py:init():619] run started, returning control to user process
+2021-11-25 04:16:52,717 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_created():217] file/dir created: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log
+2021-11-25 04:16:55,417 INFO    SenderThread:3729 [sender.py:_save_file():960] saving file wandb-metadata.json with policy now
+2021-11-25 04:16:55,681 INFO    Thread-12 :3729 [upload_job.py:push():137] Uploaded file /tmp/tmptgm77ympwandb/27lw1v6q-wandb-metadata.json
+2021-11-25 04:16:55,718 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/conda-environment.yaml
+2021-11-25 04:16:55,718 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_created():217] file/dir created: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-metadata.json
+2021-11-25 04:16:57,719 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log
+2021-11-25 04:17:17,778 INFO    MainThread:3715 [wandb_run.py:_atexit_cleanup():1786] got exitcode: 1
+2021-11-25 04:17:17,779 INFO    MainThread:3715 [wandb_run.py:_restore():1758] restore
+2021-11-25 04:17:19,727 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log
+2021-11-25 04:17:19,801 INFO    SenderThread:3729 [sender.py:send_exit():370] handling exit code: 1
+2021-11-25 04:17:19,802 INFO    SenderThread:3729 [sender.py:send_exit():372] handling runtime: 32
+2021-11-25 04:17:19,802 INFO    SenderThread:3729 [sender.py:_save_file():960] saving file wandb-summary.json with policy end
+2021-11-25 04:17:19,802 INFO    SenderThread:3729 [sender.py:send_exit():382] send defer
+2021-11-25 04:17:19,803 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 0
+2021-11-25 04:17:19,803 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 0
+2021-11-25 04:17:19,804 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 1
+2021-11-25 04:17:19,804 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 1
+2021-11-25 04:17:19,803 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 865
+  total_bytes: 865
+}
+
+2021-11-25 04:17:19,883 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 1
+2021-11-25 04:17:19,883 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 2
+2021-11-25 04:17:19,883 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 2
+2021-11-25 04:17:19,884 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 2
+2021-11-25 04:17:19,884 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 3
+2021-11-25 04:17:19,884 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 3
+2021-11-25 04:17:19,884 INFO    SenderThread:3729 [sender.py:_save_file():960] saving file wandb-summary.json with policy end
+2021-11-25 04:17:19,885 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 3
+2021-11-25 04:17:19,885 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 4
+2021-11-25 04:17:19,885 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 4
+2021-11-25 04:17:19,885 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 4
+2021-11-25 04:17:19,951 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 5
+2021-11-25 04:17:19,952 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 5
+2021-11-25 04:17:19,952 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 865
+  total_bytes: 865
+}
+
+2021-11-25 04:17:19,952 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 5
+2021-11-25 04:17:19,952 INFO    SenderThread:3729 [dir_watcher.py:finish():283] shutting down directory watcher
+2021-11-25 04:17:20,727 INFO    Thread-9  :3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log
+2021-11-25 04:17:20,727 INFO    SenderThread:3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/config.yaml
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-summary.json
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:finish():313] scan: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/config.yaml config.yaml
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-summary.json wandb-summary.json
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/requirements.txt requirements.txt
+2021-11-25 04:17:20,728 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/conda-environment.yaml conda-environment.yaml
+2021-11-25 04:17:20,729 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log output.log
+2021-11-25 04:17:20,729 INFO    SenderThread:3729 [dir_watcher.py:finish():327] scan save: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-metadata.json wandb-metadata.json
+2021-11-25 04:17:20,729 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 6
+2021-11-25 04:17:20,729 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 6
+2021-11-25 04:17:20,730 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 865
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:20,730 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 6
+2021-11-25 04:17:20,730 INFO    SenderThread:3729 [file_pusher.py:finish():177] shutting down file pusher
+2021-11-25 04:17:20,831 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 865
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:20,935 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 26532
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:21,023 INFO    Thread-16 :3729 [upload_job.py:push():137] Uploaded file /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/conda-environment.yaml
+2021-11-25 04:17:21,025 INFO    Thread-13 :3729 [upload_job.py:push():137] Uploaded file /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/config.yaml
+2021-11-25 04:17:21,030 INFO    Thread-17 :3729 [upload_job.py:push():137] Uploaded file /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/output.log
+2021-11-25 04:17:21,034 INFO    Thread-14 :3729 [upload_job.py:push():137] Uploaded file /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/wandb-summary.json
+2021-11-25 04:17:21,037 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 26532
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:21,039 INFO    Thread-15 :3729 [upload_job.py:push():137] Uploaded file /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/files/requirements.txt
+2021-11-25 04:17:21,138 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 26532
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:21,239 INFO    Thread-8  :3729 [sender.py:transition_state():395] send defer: 7
+2021-11-25 04:17:21,240 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 7
+2021-11-25 04:17:21,240 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 7
+2021-11-25 04:17:21,242 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 26532
+  total_bytes: 26532
+}
+
+2021-11-25 04:17:21,274 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 8
+2021-11-25 04:17:21,275 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 8
+2021-11-25 04:17:21,275 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 8
+2021-11-25 04:17:21,275 INFO    SenderThread:3729 [sender.py:transition_state():395] send defer: 9
+2021-11-25 04:17:21,275 INFO    HandlerThread:3729 [handler.py:handle_request_defer():147] handle defer: 9
+2021-11-25 04:17:21,276 INFO    SenderThread:3729 [sender.py:send_request_defer():391] handle sender defer: 9
+2021-11-25 04:17:21,343 INFO    SenderThread:3729 [file_pusher.py:join():182] waiting for file pusher
+2021-11-25 04:17:21,397 INFO    MainThread:3715 [wandb_run.py:_wait_for_finish():1916] got exit ret: done: true
+exit_result {
+}
+file_counts {
+  wandb_count: 6
+}
+pusher_stats {
+  uploaded_bytes: 26532
+  total_bytes: 26532
+}
+local_info {
+}
+
+2021-11-25 04:17:21,398 INFO    HandlerThread:3729 [handler.py:finish():731] shutting down handler
+2021-11-25 04:17:22,276 INFO    WriterThread:3729 [datastore.py:close():281] close: /home/gsamp/mbrl-lib/mbrl/algorithms/exp/mbpo_backwards/default/cartpole_continuous/2021.11.25/041647/wandb/run-20211125_041647-2o9qphg7/run-2o9qphg7.wandb
+2021-11-25 04:17:22,399 INFO    SenderThread:3729 [sender.py:finish():1091] shutting down sender
+2021-11-25 04:17:22,399 INFO    SenderThread:3729 [file_pusher.py:finish():177] shutting down file pusher
+2021-11-25 04:17:22,399 INFO    SenderThread:3729 [file_pusher.py:join():182] waiting for file pusher
+2021-11-25 04:17:22,413 INFO    MainThread:3715 [wandb_run.py:_append_files():2184] logging synced files

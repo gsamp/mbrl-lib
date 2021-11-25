@@ -1,0 +1,3 @@
+- algorithm=mbpo_backwards
+- overrides=mbpo_backwards_cartpole
+- debug_mode=true

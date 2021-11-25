@@ -202,6 +202,7 @@ def train(
         dynamics_model,
         optim_lr=cfg.overrides.model_lr,
         weight_decay=cfg.overrides.model_wd,
+        group_name = "forward_model",
         logger=None if silent else logger,
     )
 
@@ -210,6 +211,7 @@ def train(
         backwards_dynamics_model, 
         optim_lr = cfg.overrides.model_lr, 
         weight_decay = cfg.overrides.model_wd, 
+        group_name = "backwards_model",
         logger=None if silent else logger, 
     )
     # GEORGIA END

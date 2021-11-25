@@ -9,6 +9,7 @@ from typing import Counter, Dict, List, Mapping, Tuple, Union
 
 import termcolor
 import torch
+import wandb
 
 LogFormatType = List[Tuple[str, str, str]]
 LogTypes = Union[int, float, torch.Tensor]
@@ -164,7 +165,7 @@ class Logger(object):
     def log_param(self, *_args):
         pass
 
-    def log_data(self, group_name: str, data: Mapping[str, LogTypes]):
+    def log_data(self, group_name: str, data: Mapping[str, LogTypes], log_to_wandb: bool = True):
         """Logs the data contained in a given dictionary to the given logging group.
 
         Args:
@@ -183,6 +184,9 @@ class Logger(object):
         self._group_steps[group_name] += 1
         if self._group_steps[group_name] % dump_frequency == 0:
             self._dump(group_name)
+
+        if log_to_wandb:
+            wandb.log({group_name: data})
 
     def _dump(self, group_name: str, save: bool = True):
         if group_name not in self._groups:

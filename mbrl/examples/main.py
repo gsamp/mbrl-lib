@@ -2,9 +2,16 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+
+# GEORGIA BEGIN
+import ctypes
+libgcc_s = ctypes.CDLL('libgcc_s.so.1')
+# GEORGIA END
+
 import hydra
 import numpy as np
 import omegaconf
+from omegaconf import OmegaConf
 import torch
 
 import mbrl.algorithms.mbpo as mbpo
@@ -13,8 +20,18 @@ import mbrl.algorithms.pets as pets
 import mbrl.algorithms.planet as planet
 import mbrl.util.mujoco as mujoco_util
 
+# GEORGIA BEGIN
+import wandb
+# GEORGIA END
+
 @hydra.main(config_path="conf", config_name="main")
 def run(cfg: omegaconf.DictConfig):
+    # GEORGIA BEGIN
+    wandb.init(project="cs229-project",
+               config=OmegaConf.to_container(cfg),
+               settings=wandb.Settings(start_method="fork"))
+    # GEORGIA END
+
     env, term_fn, reward_fn = mujoco_util.make_env(cfg)
     np.random.seed(cfg.seed)
     torch.manual_seed(cfg.seed)

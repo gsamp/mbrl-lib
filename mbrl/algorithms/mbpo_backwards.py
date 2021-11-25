@@ -272,6 +272,19 @@ def train(
                     rollout_batch_size,
                 )
 
+                # GEORGIA BEGIN
+                # TODO: experiment tweaking rollout length 
+                rollout_model_and_populate_sac_buffer(
+                    backwards_model_env, 
+                    replay_buffer, 
+                    backwards_agent, 
+                    sac_buffer, 
+                    cfg.algorithm.sac_samples_action, 
+                    rollout_length, 
+                    rollout_batch_size, 
+                )
+                # GEORGIA END
+
                 if debug_mode:
                     print(
                         f"Epoch: {epoch}. "

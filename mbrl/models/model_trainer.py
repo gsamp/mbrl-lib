@@ -56,17 +56,16 @@ class ModelTrainer:
 
         self.logger = logger
         # GEORGIA BEGIN
-        if self.logger:
-            if group_name:
-                self.group_name = group_name
-            else:
-                self.group_name = _LOG_GROUP_NAME
-            self.logger.register_group(
-                self.group_name,
-                MODEL_LOG_FORMAT,
-                color="blue",
-                dump_frequency=1,
-            )
+        if group_name:
+             self.group_name = group_name
+        else:
+            self.group_name = "model_train" ## _LOG_GROUP_NAME
+        self.logger.register_group(
+            self.group_name,
+            MODEL_LOG_FORMAT,
+            color="blue",
+            dump_frequency=1,
+        )
         # GEORGIA END
 
         self.optimizer = optim.Adam(

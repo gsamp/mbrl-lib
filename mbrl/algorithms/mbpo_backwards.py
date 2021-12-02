@@ -26,6 +26,42 @@ MBPO_LOG_FORMAT = mbrl.constants.EVAL_LOG_FORMAT + [
     ("rollout_length", "RL", "int"),
 ]
 
+def backwards_rollout_model_and_populate_sac_buffer (
+    model_env: mbrl.models.ModelEnv,
+    replay_buffer: mbrl.util.ReplayBuffer,
+    agent: SACAgent,
+    sac_buffer: pytorch_sac.ReplayBuffer,
+    sac_samples_action: bool,
+    rollout_horizon: int,
+    batch_size: int,
+):
+
+    batch = replay_buffer.sample(batch_size)
+    initial_obs, *_ = cast(mbrl.types.TransitionBatch, batch).astuple()
+    model_state = model_env.reset(
+        initial_obs_batch=cast(np.ndarray, initial_obs),
+        return_as_np=True,
+    )
+    accum_dones = np.zeros(initial_obs.shape[0], dtype=bool)
+    obs = initial_obs
+    for i in range(rollout_horizon):
+        action = agent.act(obs, sample=sac_samples_action, batched=True)
+        pred_next_obs, pred_rewards, pred_dones, model_state = model_env.step(
+            action, model_state, sample=True
+        )
+        # GEORGIA BEGIN 
+        sac_buffer.add_batch(
+            pred_next_obs[~accum_dones],
+            action[~accum_dones],
+            pred_rewards[~accum_dones],
+            obs[~accum_dones],
+            pred_dones[~accum_dones],
+            pred_dones[~accum_dones],
+        )
+        # GEORGIA END 
+        obs = pred_next_obs
+        accum_dones |= pred_dones.squeeze()
+
 
 def rollout_model_and_populate_sac_buffer(
     model_env: mbrl.models.ModelEnv,
@@ -276,7 +312,7 @@ def train(
 
                 # GEORGIA BEGIN
                 # TODO: experiment tweaking rollout length 
-                rollout_model_and_populate_sac_buffer(
+                backwards_rollout_model_and_populate_sac_buffer(
                     backwards_model_env, 
                     replay_buffer, 
                     backwards_agent, 

@@ -1,9 +1,0 @@
-/opt/conda/lib/python3.7/site-packages/hydra/utils.py:32: UserWarning: `OmegaConf.is_none()` is deprecated, see https://github.com/omry/omegaconf/issues/547
-  if OmegaConf.is_none(config):
-Traceback (most recent call last):
-  File "/home/gsamp/mbrl-lib/mbrl/examples/main.py", line 45, in run
-    return mbpo_backwards.train(env, test_env, term_fn, cfg)
-  File "/home/gsamp/mbrl-lib/mbrl/algorithms/mbpo_backwards.py", line 206, in train
-    group_name = "forward_model",
-TypeError: __init__() got an unexpected keyword argument 'group_name'
-Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

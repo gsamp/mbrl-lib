@@ -2,6 +2,12 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+
+
+# This file extends ./mbpo.py to implement Bidirectional Model-Based
+# Policy Optimization. We create a separate file to be able to compare
+# this implementation against the baseline. 
+
 import os
 from typing import Optional, Tuple, cast
 
@@ -25,6 +31,10 @@ MBPO_LOG_FORMAT = mbrl.constants.EVAL_LOG_FORMAT + [
     ("epoch", "E", "int"),
     ("rollout_length", "RL", "int"),
 ]
+
+# Rollout model and populate SAC buffer for the Backwards agent.
+# Extends the function with similar name from the Forwards agent, 
+# but swaps next_obs with obs.  
 
 def backwards_rollout_model_and_populate_sac_buffer (
     model_env: mbrl.models.ModelEnv,
@@ -50,8 +60,10 @@ def backwards_rollout_model_and_populate_sac_buffer (
             action, model_state, sample=True
         )
         # GEORGIA BEGIN 
+        # We invert backwards rollouts when adding to the replay buffer
+        # by swapping next_obs with obs
         sac_buffer.add_batch(
-            pred_next_obs[~accum_dones],
+            pred_next_obs[~accum_dones], 
             action[~accum_dones],
             pred_rewards[~accum_dones],
             obs[~accum_dones],
@@ -161,10 +173,14 @@ def train(
 
     mbrl.planning.complete_agent_cfg(env, cfg.algorithm.agent)
     # GEORGIA BEGIN
+    # Complete the configuration of the backwards agent. A new algorithm
+    # config file is created in mbrl/examples/conf/algorithm to support this. 
     mbrl.planning.complete_agent_cfg(env, cfg.algorithm.backwards_agent)
     # GEORGIA END
     agent = hydra.utils.instantiate(cfg.algorithm.agent)
     # GEORGIA BEGIN
+    # Instantiate the backwards agent.
+    # A new agent class, BackwardsSACAgent, is created to suport this. 
     backwards_agent = hydra.utils.instantiate(cfg.algorithm.backwards_agent)
     # GEORGIA END
 
@@ -189,6 +205,7 @@ def train(
     dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg, obs_shape, act_shape)
 
     # GEORGIA BEGIN
+    # Create a new dynamics model 
     backwards_dynamics_model = mbrl.util.common.create_one_dim_tr_model(cfg,
             obs_shape, act_shape, backwards = True)
     # GEORGIA END
@@ -228,6 +245,7 @@ def train(
     )
 
     # GEORGIA BEGIN
+    # Create a backwards_model_env with the backwards_dynamics_model.
     backwards_model_env = mbrl.models.ModelEnv(
         env, backwards_dynamics_model, termination_fn, None,
         generator=torch_generator
@@ -243,6 +261,7 @@ def train(
     )
 
     # GEORGIA BEGIN
+    # Create a trainer for the backwards_dynamics_model.
     backwards_model_trainer = mbrl.models.ModelTrainer(
         backwards_dynamics_model, 
         optim_lr = cfg.overrides.model_lr, 
@@ -289,6 +308,7 @@ def train(
                 )
 
                 # GEORGIA BEGIN
+                # Train the backwards_dynamics_model
                 mbrl.util.common.train_model_and_save_model_and_data(
                     backwards_dynamics_model, 
                     backwards_model_trainer, 
@@ -306,19 +326,19 @@ def train(
                     agent,
                     sac_buffer,
                     cfg.algorithm.sac_samples_action,
-                    rollout_length,
+                    rollout_length, 
                     rollout_batch_size,
                 )
 
                 # GEORGIA BEGIN
-                # TODO: experiment tweaking rollout length 
+                # Rollout the backwards_model_env using the backwards agent.
                 backwards_rollout_model_and_populate_sac_buffer(
                     backwards_model_env, 
                     replay_buffer, 
                     backwards_agent, 
                     sac_buffer, 
                     cfg.algorithm.sac_samples_action, 
-                    rollout_length, 
+                    rollout_length, # edit to experiment with rollout lengths
                     rollout_batch_size, 
                 )
                 # GEORGIA END
@@ -339,6 +359,7 @@ def train(
                     break  # only update every once in a while
                 agent.update(sac_buffer, logger, updates_made)
                 # GEORGIA BEGIN
+                # Update the backwards agent.
                 backwards_agent.update(sac_buffer, logger, updates_made)
                 # GEORGIA END
                 updates_made += 1

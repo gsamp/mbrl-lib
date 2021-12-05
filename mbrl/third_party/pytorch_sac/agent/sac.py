@@ -171,6 +171,8 @@ class SACAgent(Agent):
         torch.save(self.actor.state_dict(), actor_path)
 
 # GEORGIA BEGIN
+# This class expands the SACAgent class and overrides the update function
+# such that next_obs and obs are swapped. 
 class BackwardsSACAgent(SACAgent):
     
     def update(self, replay_buffer, logger, step):

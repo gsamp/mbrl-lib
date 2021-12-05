@@ -11,6 +11,8 @@ import mbrl.util.math
 from .model import Ensemble, Model
 from .one_dim_tr_model import OneDTransitionRewardModel
 
+# Extends OneDTransitionRewardModel and overrides _process_batch 
+# such that the next_obs is the input, and obs is the target.
 class BackwardsOneDTransitionRewardModel(OneDTransitionRewardModel):
     def _process_batch(self, batch: mbrl.types.TransitionBatch, _as_float: bool = False) -> Tuple[torch.Tensor, torch.Tensor]:
         next_obs, action, obs, reward, _ = batch.astuple()
